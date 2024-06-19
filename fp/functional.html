@@ -19,6 +19,12 @@
 
         const temp_users = [];
 
+        /**
+         *  
+         * before created function 
+         *  to check data
+         */
+
         for (let i = 0; i < users.length; ++i) {
             if (users[i].age > 30) {
                 temp_users.push(users[i]);
@@ -33,6 +39,10 @@
             names.push(name);
         }
         console.log(names);
+
+        /**
+         *  remove duplication code with function
+         */
 
         const _map = (arr, callback) => {
             const ret_arr = Array.from(arr);
@@ -53,6 +63,10 @@
             }
             return ret_arr;
         }
+
+        /**
+         *  test _map, _filter function 
+         */
         console.log(_map(users, (user) => ({
             ...user,
             age: user.age + 30
