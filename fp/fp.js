@@ -53,7 +53,21 @@ function _filter(arr, predict) {
     return ret_arr;
 }
 
+function _curry(fn) {
+    return function(a, b) {
+        return arguments.length === 2? fn(a, b) : function(b) {
+            return fn(a, b);
+        }
+    }
+}
 
+function _curryr(fn) {
+    return function(a, b) {
+        return arguments.length === 2? fn(b, a) : function (b) {
+            return fn(b, a);
+        }
+    }
+}
 
 
 function test() {
@@ -71,6 +85,11 @@ function test() {
     console.log(_map(document.querySelectorAll("*"), function(node) {
         return node.nodeName;
     }))
+    const curry = _curry((a, b) => a + b);
+
+    console.log(curry(10)(5));
+    const curry10 = curry(10);
+    console.log(curry10(5));
 }
 
 test();
