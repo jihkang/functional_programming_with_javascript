@@ -37,16 +37,16 @@ function _each(arr, iter) {
     return arr;
 }
 
-const _map = (arr, callback) => {
+const _map = (arr, map) => {
     const ret_arr = [];
-    _each(arr, (item) => ret_arr.push(callback(item)));
+    _each(arr, (item) => ret_arr.push(map(item)));
     return ret_arr;
 }
 
-function _filter(arr, callback) {
+function _filter(arr, predict) {
     const ret_arr = [];
     _each(arr, (item) => {
-        if (typeof callback === 'function' && callback(item)) {
+        if (typeof callback === 'function' && predict(item)) {
             ret_arr.push(item);
         }
     });
@@ -68,5 +68,9 @@ function test() {
     })), users);
     console.log(users);
     console.log(_filter(users, (user) => user.age > 100));
-
+    console.log(_map(document.querySelectorAll("*"), function(node) {
+        return node.nodeName;
+    }))
 }
+
+test();
