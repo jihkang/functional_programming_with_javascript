@@ -30,25 +30,30 @@ for (let i = 0; i < temp_users.length; ++i) {
  *  remove duplication code with function
  */
 
-const _map = (arr, callback) => {
-    const ret_arr = Array.from(arr);
-    for (let i = 0; i < arr.length; ++i) {
-        if (typeof callback === 'function') {
-            ret_arr[i] = (callback(arr[i]));
-        }
+function _each(arr, iter) {
+    for (let i = 0;i < arr.length; ++i) {
+        iter(arr[i]);
     }
+    return arr;
+}
+
+const _map = (arr, callback) => {
+    const ret_arr = [];
+    _each(arr, (item) => ret_arr.push(callback(item)));
     return ret_arr;
 }
 
 function _filter(arr, callback) {
     const ret_arr = [];
-    for (let i = 0; i < arr.length; ++i) {
-        if (typeof callback === 'function' && callback(arr[i])) {
-            ret_arr.push(arr[i]);
+    _each(arr, (item) => {
+        if (typeof callback === 'function' && callback(item)) {
+            ret_arr.push(item);
         }
-    }
+    });
     return ret_arr;
 }
+
+
 
 
 function test() {
