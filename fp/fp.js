@@ -46,7 +46,7 @@ const _map = (arr, map) => {
 function _filter(arr, predict) {
     const ret_arr = [];
     _each(arr, (item) => {
-        if (typeof callback === 'function' && predict(item)) {
+        if (typeof predict === 'function' && predict(item)) {
             ret_arr.push(item);
         }
     });
@@ -63,33 +63,45 @@ function _curry(fn) {
 
 function _curryr(fn) {
     return function(a, b) {
-        return arguments.length === 2? fn(b, a) : function (b) {
+        return arguments.length === 2? fn(a, b) : function (b) {
             return fn(b, a);
         }
     }
 }
 
+const _get = _curryr(function(obj, key) {
+    console.log(obj, key);
+    return obj == null ? undefined : obj[key];
+    
+});
 
 function test() {
 /**
  *  test _map, _filter function 
  */
-    console.log(temp_users);
-    console.log(names);
-    console.log(_map(users, (user) => ({
-        ...user,
-        age: user.age + 30
-    })), users);
-    console.log(users);
-    console.log(_filter(users, (user) => user.age > 100));
+    // console.log(temp_users);
+    // console.log(names);
+    // console.log(_map(users, (user) => ({
+    //     ...user,
+    //     age: user.age + 30
+    // })), users);
+    // console.log(users);
+    // console.log(_filter(users, (user) => user.age));
+    const get_age = _get('age');
+    console.log(get_age(users[0]))
+    console.log(_map(_filter(users, (user) => user.age < 40), (user) => user.age));
+    console.log(_map(_filter(users, (user) => user.age < 40), _get('age')));
     console.log(_map(document.querySelectorAll("*"), function(node) {
         return node.nodeName;
     }))
     const curry = _curry((a, b) => a + b);
-
     console.log(curry(10)(5));
     const curry10 = curry(10);
     console.log(curry10(5));
+    const curryr = _curryr((a, b) => a - b);
+    const sub10 = curryr(10);
+    console.log(curryr(5, 10));
+    console.log(curryr(10)(5));
 }
 
 test();
