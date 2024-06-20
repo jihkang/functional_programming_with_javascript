@@ -19,7 +19,6 @@ for (let i = 0; i < users.length; ++i) {
         temp_users.push(users[i]);
     }
 }
-console.log(temp_users);
 
 const names = [];
 for (let i = 0; i < temp_users.length; ++i) {
@@ -27,8 +26,6 @@ for (let i = 0; i < temp_users.length; ++i) {
 
     names.push(name);
 }
-console.log(names);
-
 /**
  *  remove duplication code with function
  */
@@ -53,12 +50,18 @@ function _filter(arr, callback) {
     return ret_arr;
 }
 
+
+function test() {
 /**
  *  test _map, _filter function 
  */
-console.log(_map(users, (user) => ({
-    ...user,
-    age: user.age + 30
-})), users);
-console.log(users);
-console.log(_filter(users, (user) => user.age > 100));
+    console.log(temp_users);
+    console.log(names);
+    console.log(_map(users, (user) => ({
+        ...user,
+        age: user.age + 30
+    })), users);
+    console.log(users);
+    console.log(_filter(users, (user) => user.age > 100));
+
+}
