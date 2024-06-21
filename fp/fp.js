@@ -95,6 +95,28 @@ function _reduce(arr, apply, init) {
   return init;
 }
 
+function _pipe(...fns) {
+  return function (arg) {
+    return _reduce(
+      fns,
+      function (arg, fn) {
+        return fn(arg);
+      },
+      arg
+    );
+  };
+}
+
+function _go(arg, ...fns) {
+  return _pipe(...fns)(arg);
+}
+
+const pipe = _pipe(
+  (a) => a + 1,
+  (a) => a * 5,
+  (a) => a * 10
+);
+
 function test() {
   /**
    *  test _map, _filter function
@@ -137,6 +159,14 @@ function test() {
 
   console.log(_reduce([1, 2, 3, 4], (a, b) => a + b, 30));
   console.log(_reduce([1, 2, 3, 4], (a, b) => a + b, 20));
+  console.log(pipe(1));
+  _go(
+    1,
+    (a) => a + 1,
+    (a) => a * 5,
+    (a) => a * 10,
+    console.log
+  );
 }
 
 test();
