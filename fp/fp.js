@@ -87,12 +87,13 @@ function _go(arg, ...fns) {
   return _pipe.apply(null, fns)(arg);
 }
 
+
+const _length = _get("length");
+
 const _each = _curryr(function (arr, iter) {
-  if (!_get(arr, "length")) {
-    return arr;
-  }
-  for (let i = 0; i < arr.length; ++i) {
-    iter(arr[i]);
+  const keys = _keys(arr);
+  for (let i = 0, len = keys.length; i < len; ++i)  {
+    iter(arr[keys[i]]);
   }
   return arr;
 })
@@ -101,7 +102,7 @@ const _map = _curryr(function(arr, map) {
   const ret_arr = [];
   _each(arr, (item) => ret_arr.push(map(item)));
   return ret_arr;
-}));
+});
 
 const _filter = _curryr(function (arr, predict) {
   const ret_arr = [];
@@ -112,6 +113,14 @@ const _filter = _curryr(function (arr, predict) {
   });
   return ret_arr;
 });
+
+const _is_object = (obj) => {
+  return typeof obj == 'object' && !!obj; 
+}
+
+function _keys(obj) {
+  return _is_object(obj) ?  Object.keys(obj) : [];
+}
 
 const pipe = _pipe(
   (a) => a + 1,
@@ -142,7 +151,6 @@ function test() {
       return node.nodeName;
     })
   );
-  // _go(_map((a) => a * 10), _filter((a) => a > 15), [1,2,3,4], console.log);
   console.log(
     'curryr apply to _map',
     _map((a) => a * 5)([1,2,3,4])
@@ -150,7 +158,7 @@ function test() {
   _go(
     users,
     _map(_get("age")),
-    _filter((age) => age < 22)
+    _filter((age) => age > 24),
     console.log
   )
   const curry = _curry((a, b) => a + b);
@@ -161,17 +169,17 @@ function test() {
   const sub10 = curryr(10);
   console.log(curryr(5, 10));
   console.log(curryr(10)(5));
-
   console.log(_reduce([1, 2, 3, 4], (a, b) => a + b, 30));
   console.log(_reduce([1, 2, 3, 4], (a, b) => a + b, 20));
-  console.log(pipe(1));
-  // _each(undefined, console.log);
   _go(
     _filter((user) => user.age < 33)),
     _map((_get("age")),
     users,
     console.log
   );
+  console.log(
+    _map({ a: 100, b: 2, c: 3 }, (v) => v * 10) 
+  )
 }
 
 
