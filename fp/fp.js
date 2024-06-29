@@ -7,7 +7,6 @@ const users = [
 ];
 
 const temp_users = [];
-
 /**
  *
  * before created function
@@ -30,28 +29,6 @@ for (let i = 0; i < temp_users.length; ++i) {
  *  remove duplication code with function
  */
 
-function _each(arr, iter) {
-  for (let i = 0; i < arr.length; ++i) {
-    iter(arr[i]);
-  }
-  return arr;
-}
-
-const _map = (arr, map) => {
-  const ret_arr = [];
-  _each(arr, (item) => ret_arr.push(map(item)));
-  return ret_arr;
-};
-
-function _filter(arr, predict) {
-  const ret_arr = [];
-  _each(arr, (item) => {
-    if (typeof predict === "function" && predict(item)) {
-      ret_arr.push(item);
-    }
-  });
-  return ret_arr;
-}
 
 function _curry(fn) {
   return function (a, b) {
@@ -74,7 +51,6 @@ function _curryr(fn) {
 }
 
 const _get = _curryr(function (obj, key) {
-  console.log(obj, key);
   return obj == null ? undefined : obj[key];
 });
 
@@ -111,6 +87,32 @@ function _go(arg, ...fns) {
   return _pipe(...fns)(arg);
 }
 
+const _each = _curryr(function (arr, iter) {
+  if (!_get(arr, "length")) {
+    return arr;
+  }
+  for (let i = 0; i < arr.length; ++i) {
+    iter(arr[i]);
+  }
+  return arr;
+})
+
+const _map = _curryr(function(arr, map) {
+  const ret_arr = [];
+  _each(arr, (item) => ret_arr.push(map(item)));
+  return ret_arr;
+}));
+
+const _filter = _curryr(function (arr, predict) {
+  const ret_arr = [];
+  _each(arr, (item) => {
+    if (typeof predict === "function" && predict(item)) {
+      ret_arr.push(item);
+    }
+  });
+  return ret_arr;
+});
+
 const pipe = _pipe(
   (a) => a + 1,
   (a) => a * 5,
@@ -121,14 +123,6 @@ function test() {
   /**
    *  test _map, _filter function
    */
-  // console.log(temp_users);
-  // console.log(names);
-  // console.log(_map(users, (user) => ({
-  //     ...user,
-  //     age: user.age + 30
-  // })), users);
-  // console.log(users);
-  // console.log(_filter(users, (user) => user.age));
   const get_age = _get("age");
   console.log(get_age(users[0]));
   console.log(
@@ -148,6 +142,17 @@ function test() {
       return node.nodeName;
     })
   );
+  // _go(_map((a) => a * 10), _filter((a) => a > 15), [1,2,3,4], console.log);
+  console.log(
+    'curryr apply to _map',
+    _map((a) => a * 5)([1,2,3,4])
+  )
+  _go(
+    users,
+    _map(_get("age")),
+    _filter((age) => age < 22)
+    console.log
+  )
   const curry = _curry((a, b) => a + b);
   console.log(curry(10)(5));
   const curry10 = curry(10);
@@ -160,13 +165,15 @@ function test() {
   console.log(_reduce([1, 2, 3, 4], (a, b) => a + b, 30));
   console.log(_reduce([1, 2, 3, 4], (a, b) => a + b, 20));
   console.log(pipe(1));
+  // _each(undefined, console.log);
   _go(
-    1,
-    (a) => a + 1,
-    (a) => a * 5,
-    (a) => a * 10,
+    _filter((user) => user.age < 33)),
+    _map((_get("age")),
+    users,
     console.log
   );
 }
+
+
 
 test();
