@@ -84,7 +84,7 @@ function _pipe(...fns) {
 }
 
 function _go(arg, ...fns) {
-  return _pipe(...fns)(arg);
+  return _pipe.apply(null, fns)(arg);
 }
 
 const _each = _curryr(function (arr, iter) {
