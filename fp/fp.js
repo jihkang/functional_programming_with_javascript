@@ -73,6 +73,7 @@ function _reduce(arr, apply, init) {
 
 function _pipe(...fns) {
   return function (arg) {
+    console.log('arg: ', arg);
     return _reduce(
       fns,
       function (arg, fn) {
